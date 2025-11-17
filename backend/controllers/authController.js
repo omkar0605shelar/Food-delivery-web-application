@@ -154,26 +154,43 @@ export const resetPassword = async (req, res) => {
   }
 }
 
-export const googleAuth = async(req, res) => {
-  try{
-    const {fullName, email, mobile, role} = req.body;
-    let user = await User.findOne({email});
+export const googleAuth = async (req, res) => {
+  try {
+    const { fullName, email, mobile, role } = req.body;
 
-    if(!user){
-      user= await User.create({fullName, email, mobile, role});
+    if (!email || !fullName) {
+      return res.status(400).json({ message: "Invalid Google user data" });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        fullName,
+        email,
+        mobile,
+        role,
+      });
     }
 
     const token = await genToken(user._id);
+
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
-      secure: false, 
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
-    })
+      sameSite: "lax", // ✅ 'lax' works better for local dev
+      secure: false, // ✅ change to true only for HTTPS
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
-    return res.status(200).json(user);
+    const { password, ...userData } = user._doc;
+    return res.status(200).json({
+      success: true,
+      message: "Google authentication successful",
+      user: userData,
+    });
+  } 
+  catch (error) {
+    console.error("Google Auth Error:", error);
+    return res.status(500).json({ message: `Google auth failed: ${error.message}` });
   }
-  catch(error){
-    return res.status(500).json(`google auth error ${error.message}`);
-  }
-}
+};

@@ -96,7 +96,7 @@ function ForgotPassword() {
                     setEmail(e.target.value);
                   }}
                   type="email"
-                  className="w-full border-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
+                  className="w-full b-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                   placeholder="Enter your email"
                   style={{ border: `1px solid ${borderColor}` }}
                   required
@@ -129,7 +129,7 @@ function ForgotPassword() {
                     setOtp(e.target.value);
                   }}
                   type="text"
-                  className="w-full border-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
+                  className="w-full b-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                   placeholder="Enter OTP"
                   style={{ border: `1px solid ${borderColor}` }}
                   value={otp}
@@ -161,7 +161,7 @@ function ForgotPassword() {
                     setPassword(e.target.value);
                   }}
                   type="text"
-                  className="w-full border-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
+                  className="w-full b-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                   placeholder="Enter new password"
                   style={{ border: `1px solid ${borderColor}` }}
                   value={password}
@@ -176,7 +176,7 @@ function ForgotPassword() {
                     setConfirmPass(e.target.value);
                   }}
                   type="text"
-                  className="w-full border-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
+                  className="w-full b-[1px] rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                   placeholder="Enter new password"
                   style={{ border: `1px solid ${borderColor}` }}
                   value={confirmPass}

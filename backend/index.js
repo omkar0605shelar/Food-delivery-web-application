@@ -5,6 +5,9 @@ import cors from 'cors';
 
 import connectDb from './config/db.js';
 import authRouter from './routes/authRoutes.js';
+import userRouter from './routes/userRoutes.js';
+import shopRouter from './routes/shopRoutes.js';
+import itemRouter from './routes/itemRoutes.js';
 
 dotenv.config();
 
@@ -20,7 +23,9 @@ app.use(cors({
 }));
 
 app.use('/api/auth', authRouter);
-
+app.use('/api/user', userRouter);
+app.use('/api/shop', shopRouter);
+app.use('/api/item', itemRouter);
 
 const startServer = async () => {
   try {
