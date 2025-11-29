@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setAddress, setCity, setState } from "../redux/userSlice";
+import { setAddress, setCity, setState } from "../redux/userSlice.js";
+import { setMapAddress, setLocation } from "../redux/mapSlice.js";
 
 function useGetCity() {
   const { userData } = useSelector((state) => state.user);
@@ -15,15 +16,13 @@ function useGetCity() {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          // Reverse Geocoding (GPS based)
           const response = await axios.get(
             `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&format=json&apiKey=${apiKey}`
           );
 
-          const info = response.data.results[0];
+          const info = response?.data?.results[0];
           console.log("Full GPS Response:", info);
 
-          // BEST way to get city
           const city =
             info.city ||
             info.town ||
@@ -34,6 +33,12 @@ function useGetCity() {
 
           const state = info.state || "Unknown State";
 
+          dispatch(
+            setMapAddress(
+              `${info?.address_line1 || ""}, ${info?.address_line2 || ""}`
+            )
+          );
+          dispatch(setLocation({ lat: latitude, lon: longitude }));
           dispatch(setCity(city));
           dispatch(setState(state));
 
@@ -49,12 +54,10 @@ function useGetCity() {
         }
       },
 
-      // On error
       (err) => {
         console.log("GeoLocation Error:", err);
       },
 
-      // FORCE HIGH ACCURACY GPS
       {
         enableHighAccuracy: true,
         timeout: 15000,

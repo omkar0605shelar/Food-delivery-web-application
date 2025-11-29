@@ -28,3 +28,4 @@ This includes real-time tracking of delivery boy.
   Created Order Model
   Created Checkout page
   This are the commits till now. Many more to come.
+6.Created Checkout page
