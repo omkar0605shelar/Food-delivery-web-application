@@ -5,11 +5,14 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       required: true,
+      trim: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -17,11 +20,13 @@ const userSchema = new mongoose.Schema(
     mobile: {
       type: String,
       required: true,
+      trim: true,
     },
     role: {
       type: String,
       enum: ["user", "owner", "deliveryBoy"],
       required: true,
+      default: "user",
     },
     resetOtp: {
       type: String,
@@ -34,8 +39,16 @@ const userSchema = new mongoose.Schema(
       type: Date,
     },
     location: {
-      type: { type: String, enum: ["Point"], default: "Point" },
-      coordinates: { type: [Number], default: [0, 0] },
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+        required: true,
+      },
     },
   },
   {
