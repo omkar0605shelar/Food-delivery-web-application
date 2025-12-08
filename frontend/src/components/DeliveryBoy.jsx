@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
+import DeliveryBoyTracking from "./DeliveryBoyTracking";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../App";
@@ -7,6 +8,7 @@ import { serverUrl } from "../App";
 function DeliveryBoy() {
   const { userData } = useSelector((state) => state.user || {});
   const [currentOrder, setCurrentOrder] = useState(null);
+  const [showOtpBox, setShowOtpBox] = useState(false);
   const [availableAssignments, setAvailableAssignments] = useState([]);
 
   const getAssignments = async () => {
@@ -48,6 +50,10 @@ function DeliveryBoy() {
     } catch (e) {
       console.log("Error while getCurrentOrder: ", e);
     }
+  };
+
+  const handleSendOtp = (e) => {
+    setShowOtpBox(true);
   };
 
   useEffect(() => {
@@ -130,6 +136,32 @@ function DeliveryBoy() {
                 {currentOrder.shopOrder.subtotal ?? 0}
               </p>
             </div>
+            <DeliveryBoyTracking data={currentOrder} />
+            {!showOtpBox ? (
+              <button
+                className="mt-4 bg-green-500 font-semibold hover:bg-green-600 w-full text-white py-2 px-4 rounded-xl shadow-md active:scale-95 transition-all duration-200 cursor-pointer"
+                onClick={handleSendOtp}
+              >
+                Mark as delivered.
+              </button>
+            ) : (
+              <div className="mt-4 p-4 border rounded-xl bg-gray-50">
+                <p className="text-sm font-semibold mb-2">
+                  Enter Otp send to{" "}
+                  <span className="text-orange-500">
+                    {currentOrder.user.fullName}
+                  </span>
+                  <input
+                    type="text"
+                    className="w-full border px-3 py-2 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    placeholder="Enter OTP"
+                  />
+                  <button className="w-full bg-orange-500 text-white py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all">
+                    Submit OTP
+                  </button>
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
