@@ -23,7 +23,8 @@ import useUpdateLocation from "./hooks/useUpdateLocation";
 import TrackOrderPage from "./pages/TrackOrderPage";
 import Shop from "./pages/Shop";
 
-export const serverUrl = "http://localhost:8000";
+export const serverUrl =
+  "https://vingo-food-delivery-web-application-2.onrender.com";
 
 function App() {
   useGetCurrentUser();
