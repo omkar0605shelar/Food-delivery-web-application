@@ -25,15 +25,7 @@ const allowedOrigins = process.env.CORS_ORIGIN.split(",").map((o) => o.trim());
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS: " + origin));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    origin: "https://vingo-frontend-4k67.onrender.com",
     credentials: true,
   })
 );

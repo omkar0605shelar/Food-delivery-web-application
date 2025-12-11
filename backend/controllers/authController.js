@@ -37,10 +37,10 @@ export const signUp = async (req, res) => {
     const token = await genToken(user._id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // required for HTTPS
-      sameSite: "none", // required for cross-domain cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
+      secure: true,
+      sameSite: "none",
+      path: "/", // VERY IMPORTANT
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
     const { password: _, ...userData } = user._doc;
@@ -68,10 +68,10 @@ export const signIn = async (req, res) => {
     const token = await genToken(user._id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // required for HTTPS
-      sameSite: "none", // required for cross-domain cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
+      secure: true,
+      sameSite: "none",
+      path: "/", // VERY IMPORTANT
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
     const { password: _, ...userData } = user._doc;
@@ -182,10 +182,10 @@ export const googleAuth = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // required for HTTPS
-      sameSite: "none", // required for cross-domain cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
+      secure: true,
+      sameSite: "none",
+      path: "/", // VERY IMPORTANT
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
     const { password, ...userData } = user._doc;
