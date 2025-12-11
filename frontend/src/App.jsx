@@ -1,6 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -27,83 +25,88 @@ export const serverUrl =
   "https://vingo-food-delivery-web-application-2.onrender.com";
 
 function App() {
+  // Always run this (loads cookie)
   useGetCurrentUser();
-  useGetCity();
-  useGetMyShop();
-  useGetShopByCity();
-  useGetItemsByCity();
-  useGetMyOrders();
-  useUpdateLocation();
 
   const { userData } = useSelector((state) => state.user);
+
+  // Run only after login, prevents spam 400 errors
+  if (userData) {
+    useGetCity();
+    useGetMyShop();
+    useGetShopByCity();
+    useGetItemsByCity();
+    useGetMyOrders();
+    useUpdateLocation();
+  }
 
   return (
     <>
       <Routes>
         <Route
           path="/signup"
-          element={!userData ? <SignUp /> : <Navigate to={"/"} />}
-        ></Route>
+          element={!userData ? <SignUp /> : <Navigate to="/" />}
+        />
 
         <Route
           path="/signin"
-          element={!userData ? <SignIn /> : <Navigate to={"/"} />}
-        ></Route>
+          element={!userData ? <SignIn /> : <Navigate to="/" />}
+        />
 
         <Route
           path="/forgot-password"
-          element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />}
-        ></Route>
+          element={!userData ? <ForgotPassword /> : <Navigate to="/" />}
+        />
 
         <Route
           path="/"
-          element={userData ? <Home /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <Home /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/create-edit-shop"
-          element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <CreateEditShop /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/add-item"
-          element={userData ? <AddItem /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <AddItem /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/edit-item/:itemId"
-          element={userData ? <EditItem /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <EditItem /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/cart"
-          element={userData ? <CartPage /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <CartPage /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/checkout"
-          element={userData ? <CheckOut /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <CheckOut /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/order-placed"
-          element={userData ? <OrderPlaced /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <OrderPlaced /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/my-orders"
-          element={userData ? <MyOrders /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <MyOrders /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/track-order/:orderId"
-          element={userData ? <TrackOrderPage /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <TrackOrderPage /> : <Navigate to="/signin" />}
+        />
 
         <Route
           path="/shop/:shopId"
-          element={userData ? <Shop /> : <Navigate to={"/signin"} />}
-        ></Route>
+          element={userData ? <Shop /> : <Navigate to="/signin" />}
+        />
       </Routes>
     </>
   );
