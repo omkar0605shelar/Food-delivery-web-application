@@ -21,13 +21,24 @@ app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
 
+const allowedOrigins = process.env.CORS_ORIGIN.split(",");
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://vingo-frontend-4k67.onrender.com",
-    credentials: true,
+    origin: function (origin, callback) {
+      // Allow requests with no origin (mobile apps, Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS: " + origin));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true, // 🟢 VERY IMPORTANT for cookies
   })
 );
-
 
 app.get("/", (req, res) => {
   res.send("Backend is running...");
