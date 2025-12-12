@@ -8,7 +8,9 @@ import { store, persistor } from "./redux/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 
 import axios from "axios";
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true; // send/receive cookies
+axios.defaults.baseURL =
+  import.meta.env.VITE_BACKEND_URL || "https://vingo-backend-1lvn.onrender.com";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

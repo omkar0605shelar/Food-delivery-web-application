@@ -22,7 +22,7 @@ import TrackOrderPage from "./pages/TrackOrderPage";
 import Shop from "./pages/Shop";
 
 export const serverUrl =
-  "https://vingo-food-delivery-web-application-2.onrender.com";
+  import.meta.env.VITE_BACKEND_URL || "https://vingo-backend-1lvn.onrender.com";
 
 function App() {
   useGetCurrentUser();

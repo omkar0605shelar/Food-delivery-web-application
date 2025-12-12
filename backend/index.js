@@ -15,29 +15,46 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Required for Render reverse proxy
+// Required when using secure cookies behind Render proxy
 app.set("trust proxy", 1);
 
 app.use(express.json());
 app.use(cookieParser());
 
-// TEMPORARY CORS (before frontend is deployed)
+// parse allowed origins from env (comma-separated)
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+// For safety: if env is empty, fallback to localhost for dev
+if (allowedOrigins.length === 0) {
+  allowedOrigins.push("http://localhost:5173");
+}
+console.log("Allowed CORS origins:", allowedOrigins);
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // local frontend
-      "*", // allow all temporarily
-    ],
-    credentials: true,
+    origin: function (origin, callback) {
+      // allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+
+      // if the origin exactly matches any in allowed list — allow it
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      console.warn("Blocked by CORS, origin:", origin);
+      return callback(new Error("Not allowed by CORS: " + origin));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    credentials: true, // IMPORTANT: allow cookies
+    optionsSuccessStatus: 200,
   })
 );
 
-// Test Route
-app.get("/", (req, res) => {
-  res.send("Backend is running...");
-});
+// --- routes etc ---
+app.get("/", (req, res) => res.send("Backend is running..."));
 
-// Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/shop", shopRouter);
@@ -48,7 +65,7 @@ const startServer = async () => {
   try {
     await connectDb();
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Server started on port ${PORT}`);
     });
   } catch (error) {
     console.error("❌ Failed to start server:", error.message);
