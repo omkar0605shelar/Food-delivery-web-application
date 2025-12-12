@@ -34,6 +34,7 @@ function App() {
   useGetItemsByCity();
   useGetMyOrders();
   useUpdateLocation();
+  console.log("New commit ");
 
   return (
     <>
