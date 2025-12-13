@@ -26,20 +26,17 @@ export const serverUrl =
 
 function App() {
   useGetCurrentUser();
+  useGetCity();
+
+  // Always call hooks
+  useGetShopByCity();
+  useGetItemsByCity();
+  useGetMyOrders();
+  useUpdateLocation();
+  useGetMyShop();
 
   const { userData } = useSelector((state) => state.user);
   useGetCity();
-
-  if (userData?.role === "user") {
-    useGetShopByCity();
-    useGetItemsByCity();
-    useGetMyOrders();
-    useUpdateLocation();
-  }
-
-  if (userData?.role === "owner") {
-    useGetMyShop();
-  }
 
   return (
     <>

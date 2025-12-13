@@ -4,31 +4,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMyOrders } from "../redux/userSlice";
 import { serverUrl } from "../App";
 
-function useGetMyOrders() {
+const useGetMyOrders = () => {
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.user);
 
   useEffect(() => {
+    // 🔒 Do not call API if user is not logged in
     if (!userData) return;
-    const fetchOrders = async () => {
+
+    const fetchMyOrders = async () => {
       try {
-        const result = await axios.get(`${serverUrl}/api/order/my-orders`, {
-          withCredentials: true,
+        const res = await axios.get(`${serverUrl}/api/order/my-orders`, {
+          withCredentials: true, // 🔥 MUST for cookie-based auth
         });
 
-        console.log("useGetMyOrders", result?.data);
-
-        dispatch(setMyOrders(result.data || []));
+        dispatch(setMyOrders(res.data || []));
       } catch (error) {
-        console.log("Order fetch error:", error);
+        console.error("useGetMyOrders error:", error);
         dispatch(setMyOrders([]));
       }
     };
 
-    fetchOrders();
+    fetchMyOrders();
   }, [dispatch, userData]);
 
   return null;
-}
+};
 
 export default useGetMyOrders;
