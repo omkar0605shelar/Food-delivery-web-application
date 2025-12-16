@@ -3,7 +3,6 @@ import {
   getCurrentUser,
   updateUserLocation,
 } from "../controllers/userController.js";
-import protect from "../middlewares/authMiddleware.js";
 
 import isAuth from "../middlewares/isAuth.js";
 

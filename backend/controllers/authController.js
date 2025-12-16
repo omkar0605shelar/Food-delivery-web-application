@@ -3,17 +3,14 @@ import bcrypt from "bcryptjs";
 import genToken from "../utils/token.js";
 import { sendOtpMail } from "../utils/mail.js";
 
-/* ================= COOKIE OPTIONS ================= */
 const cookieOptions = {
   httpOnly: true,
-  secure: true, // REQUIRED on Render (HTTPS)
-  sameSite: "none", // REQUIRED for cross-site cookies
-  domain: ".onrender.com", // ⭐ FIX: SHARE COOKIE ACROSS SUBDOMAINS
+  secure: true,
+  sameSite: "none",
   path: "/",
   expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 };
 
-/* ================= SIGN UP ================= */
 export const signUp = async (req, res) => {
   try {
     const { fullName, email, password, mobile, role } = req.body;
@@ -57,7 +54,6 @@ export const signUp = async (req, res) => {
   }
 };
 
-/* ================= SIGN IN ================= */
 export const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -84,7 +80,6 @@ export const signIn = async (req, res) => {
   }
 };
 
-/* ================= SIGN OUT ================= */
 export const signOut = async (req, res) => {
   try {
     res.clearCookie("token", {
@@ -98,7 +93,6 @@ export const signOut = async (req, res) => {
   }
 };
 
-/* ================= SEND OTP ================= */
 export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -123,7 +117,6 @@ export const sendOtp = async (req, res) => {
   }
 };
 
-/* ================= VERIFY OTP ================= */
 export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -144,7 +137,6 @@ export const verifyOtp = async (req, res) => {
   }
 };
 
-/* ================= RESET PASSWORD ================= */
 export const resetPassword = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -164,7 +156,6 @@ export const resetPassword = async (req, res) => {
   }
 };
 
-/* ================= GOOGLE AUTH ================= */
 export const googleAuth = async (req, res) => {
   try {
     const { fullName, email, mobile, role } = req.body;

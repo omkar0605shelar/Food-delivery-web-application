@@ -2,6 +2,9 @@ import User from "../models/userModel.js";
 
 const isAuth = async (req, res, next) => {
   try {
+    console.log("Cookies:", req.cookies);
+    console.log("Auth header:", req.headers.authorization);
+
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
