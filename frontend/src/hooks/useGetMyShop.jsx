@@ -10,20 +10,17 @@ function useGetMyShop() {
 
   useEffect(() => {
     if (!userData || userData.role !== "owner") return;
+
     const fetchShop = async () => {
       try {
         const result = await axios.get(`${serverUrl}/api/shop/get-my-shop`, {
           withCredentials: true,
         });
 
-        if (result.data) {
-          console.log("useGetMyShop", result?.data);
-          dispatch(setMyShopData(result.data));
-        } else {
-          dispatch(setMyShopData(null));
-        }
+        console.log("useGetMyShop", result.data);
+        dispatch(setMyShopData(result.data));
       } catch (error) {
-        console.log("useGetMyShop error", error);
+        console.log("useGetMyShop error", error.response?.status);
         dispatch(setMyShopData(null));
       }
     };
