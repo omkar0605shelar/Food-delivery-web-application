@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
 const isAuth = async (req, res, next) => {
@@ -11,12 +10,17 @@ const isAuth = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.userId = decoded.id; // ✅ THIS LINE FIXES EVERYTHING
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    req.userId = user._id;
+    req.user = user; // ⭐ THIS WAS MISSING
 
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
-
-export default isAuth;
