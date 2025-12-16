@@ -13,11 +13,16 @@ const userSlice = createSlice({
     totalAmount: 0,
     myOrders: [],
     searchItems: null,
+    authChecked: false,
   },
 
   reducers: {
     setUserData: (state, action) => {
       state.userData = action.payload;
+      state.authChecked = true;
+    },
+    setAuthChecked: (state, action) => {
+      state.authChecked = true;
     },
     setCity: (state, action) => {
       state.currentCity = action.payload;

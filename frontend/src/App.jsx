@@ -25,17 +25,19 @@ export const serverUrl =
   import.meta.env.VITE_BACKEND_URL || "https://vingo-backend-1lvn.onrender.com";
 
 function App() {
+  const { userData, authChecked } = useSelector((state) => state.user);
+
   useGetCurrentUser();
   useGetCity();
-
-  // Always call hooks
   useGetShopByCity();
   useGetItemsByCity();
   useGetMyOrders();
   useUpdateLocation();
   useGetMyShop();
 
-  const { userData } = useSelector((state) => state.user);
+  if (!authChecked) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

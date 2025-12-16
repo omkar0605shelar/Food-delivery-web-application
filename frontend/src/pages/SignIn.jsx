@@ -1,23 +1,23 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { serverUrl } from '../App';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../firebase';
-import { ClipLoader } from 'react-spinners';
-import { useDispatch } from 'react-redux';
-import { setUserData } from '../redux/userSlice';
+import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+import { ClipLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 function SignIn() {
-  const primaryColor = '#ff4d2d';
-  const bgColor = '#fff9f6';
-  const borderColor = '#ddd';
+  const primaryColor = "#ff4d2d";
+  const bgColor = "#fff9f6";
+  const borderColor = "#ddd";
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [err, setErr] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -33,34 +33,39 @@ function SignIn() {
         { withCredentials: true }
       );
 
-      console.log('SignIn success:', result.data);
+      console.log("SignIn success:", result.data);
       dispatch(setUserData(result.data));
-      setErr('');
+      setErr("");
       setLoading(false);
     } catch (error) {
-      console.error('Error while handleSignIn:', error);
-      setErr(error?.response?.data?.message || 'Sign-in failed');
+      console.error("Error while handleSignIn:", error);
+      setErr(error?.response?.data?.message || "Sign-in failed");
       setLoading(false);
     }
   };
 
- const handleGoogleAuth = async () => {
-    setGoogleLoading(true);
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-
+  const handleGoogleAuth = async () => {
     try {
-      const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
-        fullName: result.user.displayName,
-        email: result.user.email,
-        mobile: "0000000000",  
-        role: "user",          
-      }, { withCredentials: true });
-      dispatch(setUserData(data));
-      setGoogleLoading(false);
-      console.log(data);
+      setGoogleLoading(true);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google-auth`,
+        {
+          fullName: result.user.displayName,
+          email: result.user.email,
+          mobile: "0000000000",
+          role: "user",
+        },
+        { withCredentials: true }
+      );
+
+      dispatch(setUserData(data.user)); // ❗ see next issue
     } catch (error) {
-      console.error("Google auth error:", error);
+      console.error(error);
+      setErr("Google sign-in failed");
+    } finally {
       setGoogleLoading(false);
     }
   };
@@ -96,10 +101,12 @@ function SignIn() {
 
         {/* Password */}
         <div className="mb-4 relative">
-          <label className="block text-gray-700 font-medium mb-1">Password</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Password
+          </label>
           <input
             onChange={(e) => setPassword(e.target.value)}
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500"
             placeholder="Enter your password"
             style={{ border: `1px solid ${borderColor}` }}
@@ -117,7 +124,7 @@ function SignIn() {
         {/* Forgot Password */}
         <div
           className="text-right mb-4 text-[#ff4d2d] font-medium cursor-pointer"
-          onClick={() => navigate('/forgot-password')}
+          onClick={() => navigate("/forgot-password")}
         >
           Forgot Password?
         </div>
@@ -130,7 +137,7 @@ function SignIn() {
           disabled={loading}
           style={{ backgroundColor: primaryColor }}
         >
-          { loading ? <ClipLoader size={20} /> : 'Sign In'}
+          {loading ? <ClipLoader size={20} /> : "Sign In"}
         </button>
 
         {err && <p className="text-red-500 text-center my-[10px]">{err}</p>}
@@ -141,23 +148,21 @@ function SignIn() {
           onClick={handleGoogleAuth}
           disabled={googleLoading}
         >
-          {googleLoading ?
-            (
-              <ClipLoader size={20} /> 
-            ) : (
-              <>
-                <FcGoogle size={20} />
-                <span>Sign In with Google</span>
-              </>
+          {googleLoading ? (
+            <ClipLoader size={20} />
+          ) : (
+            <>
+              <FcGoogle size={20} />
+              <span>Sign In with Google</span>
+            </>
           )}
-
         </button>
 
         <p
           className="text-center mt-6 cursor-pointer"
-          onClick={() => navigate('/signup')}
+          onClick={() => navigate("/signup")}
         >
-          Want to create a new account?{' '}
+          Want to create a new account?{" "}
           <span className="text-[#ff4d2d]">Sign Up</span>
         </p>
       </div>
