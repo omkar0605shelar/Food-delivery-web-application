@@ -25,17 +25,22 @@ export const serverUrl =
   import.meta.env.VITE_BACKEND_URL || "https://vingo-backend-1lvn.onrender.com";
 
 function App() {
-  useGetCurrentUser();
-  useGetCity();
+  const { userData } = useSelector((state) => state.user);
 
-  // Always call hooks
+  // Always safe hooks
+  useGetCity();
   useGetShopByCity();
   useGetItemsByCity();
-  useGetMyOrders();
-  useUpdateLocation();
-  useGetMyShop();
 
-  const { userData } = useSelector((state) => state.user);
+  // 🔐 Auth-required hooks
+  useEffect(() => {
+    if (userData) {
+      useGetCurrentUser();
+      useGetMyOrders();
+      useUpdateLocation();
+      useGetMyShop();
+    }
+  }, [userData]);
 
   return (
     <>
