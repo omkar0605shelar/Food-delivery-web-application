@@ -20,6 +20,7 @@ import useGetMyOrders from "./hooks/useGetMyOrders";
 import useUpdateLocation from "./hooks/useUpdateLocation";
 import TrackOrderPage from "./pages/TrackOrderPage";
 import Shop from "./pages/Shop";
+import { useEffect } from "react";
 
 export const serverUrl =
   import.meta.env.VITE_BACKEND_URL || "https://vingo-backend-1lvn.onrender.com";
