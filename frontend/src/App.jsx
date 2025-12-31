@@ -28,20 +28,14 @@ export const serverUrl =
 function App() {
   const { userData } = useSelector((state) => state.user);
 
-  // Always safe hooks
   useGetCity();
   useGetShopByCity();
   useGetItemsByCity();
 
-  // 🔐 Auth-required hooks
-  useEffect(() => {
-    if (userData) {
-      useGetCurrentUser();
-      useGetMyOrders();
-      useUpdateLocation();
-      useGetMyShop();
-    }
-  }, [userData]);
+  useGetCurrentUser(userData);
+  useGetMyOrders(userData);
+  useUpdateLocation(userData);
+  useGetMyShop(userData);
 
   return (
     <>
